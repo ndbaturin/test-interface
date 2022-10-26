@@ -59,7 +59,7 @@ export const MULTICALL_ADDRESS: AddressMap = {
 }
 
 export const SWAP_ROUTER_ADDRESSES: AddressMap = {
-  ...constructSameAddressMap('0xF7a8B8AC9a9Bc988486D92FE4630418c8A3b6d17', [
+  ...constructSameAddressMap('0x387CA71440614f43ffb1D43f6d5508297aF91dcB', [
     SupportedChainId.OPTIMISM,
     SupportedChainId.OPTIMISM_GOERLI,
     SupportedChainId.ARBITRUM_ONE,
