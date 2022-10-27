@@ -4,10 +4,8 @@ import type { JsonRpcProvider, TransactionResponse } from '@ethersproject/provid
 import { t, Trans } from '@lingui/macro'
 import { Trade } from '@uniswap/router-sdk'
 import { Currency, TradeType } from '@uniswap/sdk-core'
-
 import { toHex } from '@uniswap/v3-sdk'
 import JSBI from 'jsbi'
-
 import { useMemo } from 'react'
 import { calculateGasMargin } from 'utils/calculateGasMargin'
 import isZero from 'utils/isZero'
