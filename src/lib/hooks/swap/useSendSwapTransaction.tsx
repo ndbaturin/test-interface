@@ -4,13 +4,14 @@ import type { JsonRpcProvider, TransactionResponse } from '@ethersproject/provid
 import { t, Trans } from '@lingui/macro'
 import { Trade } from '@uniswap/router-sdk'
 import { Currency, TradeType } from '@uniswap/sdk-core'
+
+import { toHex } from '@uniswap/v3-sdk'
+import JSBI from 'jsbi'
+
 import { useMemo } from 'react'
 import { calculateGasMargin } from 'utils/calculateGasMargin'
 import isZero from 'utils/isZero'
 import { swapErrorToUserReadableMessage } from 'utils/swapErrorToUserReadableMessage'
-
-import JSBI from 'jsbi'
-import { toHex } from '@uniswap/v3-sdk'
 
 interface SwapCall {
   address: string
@@ -54,11 +55,11 @@ export default function useSendSwapTransaction(
               !value || isZero(value)
                 ? { from: account, to: address, data: calldata }
                 : {
-                  from: account,
-                  to: address,
-                  data: calldata,
-                  value,
-                }
+                    from: account,
+                    to: address,
+                    data: calldata,
+                    value,
+                  }
 
             return provider
               .estimateGas(tx)
@@ -137,10 +138,10 @@ export default function useSendSwapTransaction(
 
 function updateValueWithCharity(value: string, tradeType: TradeType): string {
   if (tradeType === TradeType.EXACT_OUTPUT) {
-    const precision = JSBI.BigInt(100);
-    const charityFee = JSBI.BigInt(5);
+    const precision = JSBI.BigInt(100)
+    const charityFee = JSBI.BigInt(5)
 
-    const bigInt = JSBI.BigInt(value);
+    const bigInt = JSBI.BigInt(value)
     const charityValue = JSBI.divide(JSBI.multiply(bigInt, charityFee), precision)
     const adjustedBigInt = JSBI.add(bigInt, charityValue)
 
