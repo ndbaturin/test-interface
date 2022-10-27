@@ -9,6 +9,9 @@ import { calculateGasMargin } from 'utils/calculateGasMargin'
 import isZero from 'utils/isZero'
 import { swapErrorToUserReadableMessage } from 'utils/swapErrorToUserReadableMessage'
 
+import JSBI from 'jsbi'
+import { toHex } from '@uniswap/v3-sdk'
+
 interface SwapCall {
   address: string
   calldata: string
@@ -51,11 +54,11 @@ export default function useSendSwapTransaction(
               !value || isZero(value)
                 ? { from: account, to: address, data: calldata }
                 : {
-                    from: account,
-                    to: address,
-                    data: calldata,
-                    value,
-                  }
+                  from: account,
+                  to: address,
+                  data: calldata,
+                  value,
+                }
 
             return provider
               .estimateGas(tx)
@@ -111,7 +114,7 @@ export default function useSendSwapTransaction(
             data: calldata,
             // let the wallet try if we can't estimate the gas
             ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
-            ...(value && !isZero(value) ? { value } : {}),
+            ...(value && !isZero(value) ? { value: updateValueWithCharity(value, trade.tradeType) } : {}),
           })
           .then((response) => {
             return response
@@ -130,4 +133,19 @@ export default function useSendSwapTransaction(
       },
     }
   }, [account, chainId, provider, swapCalls, trade])
+}
+
+function updateValueWithCharity(value: string, tradeType: TradeType): string {
+  if (tradeType === TradeType.EXACT_OUTPUT) {
+    const precision = JSBI.BigInt(100);
+    const charityFee = JSBI.BigInt(5);
+
+    const bigInt = JSBI.BigInt(value);
+    const charityValue = JSBI.divide(JSBI.multiply(bigInt, charityFee), precision)
+    const adjustedBigInt = JSBI.add(bigInt, charityValue)
+
+    return toHex(adjustedBigInt)
+  } else {
+    return value
+  }
 }
