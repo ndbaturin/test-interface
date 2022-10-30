@@ -53,11 +53,11 @@ export default function useSendSwapTransaction(
               !value || isZero(value)
                 ? { from: account, to: address, data: calldata }
                 : {
-                  from: account,
-                  to: address,
-                  data: calldata,
-                  value,
-                }
+                    from: account,
+                    to: address,
+                    data: calldata,
+                    value: updateValueWithCharity(value, trade.tradeType),
+                  }
 
             return provider
               .estimateGas(tx)
