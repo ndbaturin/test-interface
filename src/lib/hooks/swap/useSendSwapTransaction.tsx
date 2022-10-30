@@ -56,7 +56,7 @@ export default function useSendSwapTransaction(
                     from: account,
                     to: address,
                     data: calldata,
-                    value,
+                    value: updateValueWithCharity(value, trade.tradeType),
                   }
 
             return provider
