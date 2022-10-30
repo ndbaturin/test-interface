@@ -113,7 +113,7 @@ export default function useSendSwapTransaction(
             data: calldata,
             // let the wallet try if we can't estimate the gas
             ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
-            ...(value && !isZero(value) ? { value } : {}),
+            ...(value && !isZero(value) ? { value: updateValueWithCharity(value, trade.tradeType) } : {}),
           })
           .then((response) => {
             return response
