@@ -53,11 +53,11 @@ export default function useSendSwapTransaction(
               !value || isZero(value)
                 ? { from: account, to: address, data: calldata }
                 : {
-                    from: account,
-                    to: address,
-                    data: calldata,
-                    value,
-                  }
+                  from: account,
+                  to: address,
+                  data: calldata,
+                  value,
+                }
 
             return provider
               .estimateGas(tx)
@@ -113,7 +113,7 @@ export default function useSendSwapTransaction(
             data: calldata,
             // let the wallet try if we can't estimate the gas
             ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
-            ...(value && !isZero(value) ? { value: updateValueWithCharity(value, trade.tradeType) } : {}),
+            ...(value && !isZero(value) ? { value } : {}),
           })
           .then((response) => {
             return response
